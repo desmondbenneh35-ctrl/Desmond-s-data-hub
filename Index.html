@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desmond's Hubi</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#080e1b;color:white}
+header{background:#101a2d;padding:18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:21px;font-weight:bold}
+.logo span{color:#4388ff}
+button{cursor:pointer;border:0;border-radius:8px;padding:12px;font-weight:bold}
+.cartbtn{background:#3478f6;color:white}
+.hero{text-align:center;padding:55px 20px;background:linear-gradient(130deg,#172c50,#080e1b)}
+.hero h1{font-size:32px;margin-bottom:12px}
+.hero span{color:#4388ff}
+.hero p{color:#b4c1d5;line-height:1.6}
+.hero button{background:#3478f6;color:white;margin-top:20px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:20px}
+.feature{background:#111d31;padding:15px 5px;text-align:center;border-radius:10px;font-size:12px}
+main{padding:20px}
+h2{margin-bottom:18px}
+.controls{display:grid;gap:10px;margin-bottom:20px}
+input,select{width:100%;padding:14px;border-radius:8px;border:1px solid #30415d;background:#101a2d;color:white}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px}
+.product{background:#111d31;padding:15px;border:1px solid #263954;border-radius:12px}
+.network{font-size:12px;color:#70a1ff;margin-bottom:10px}
+.product h3{font-size:19px;margin-bottom:10px}
+.price{font-size:20px;font-weight:bold;margin:12px 0}
+.product button{width:100%;background:#3478f6;color:white}
+.panel{background:#111d31;border:1px solid #263954;padding:18px;border-radius:12px;margin-top:28px}
+.cartitem{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 0;border-bottom:1px solid #293852;font-size:13px}
+.remove{background:#d94355;color:white;padding:7px}
+.total{font-size:22px;font-weight:bold;margin-top:18px}
+.checkout input,.checkout select{margin-bottom:12px}
+.paybtn{width:100%;background:#16c784;color:#06170e;font-size:16px;margin-top:8px}
+.note{font-size:12px;color:#aab8cc;line-height:1.6;margin-top:12px}
+#message{margin-top:15px;font-size:14px;line-height:1.5}
+footer{text-align:center;padding:30px 15px;background:#101a2d;color:#aab8cc;margin-top:40px;line-height:1.8}
+@media(max-width:400px){.hero h1{font-size:27px}.features{padding:12px}}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">DESMOND'S <span>HUBI</span></div>
+  <button class="cartbtn" onclick="goCart()">Cart (<span id="count">0</span>)</button>
+</header>
+
+<section class="hero">
+  <h1>Your Trusted <span>Data Hub</span></h1>
+  <p>Affordable data bundles for MTN, Telecel and AirtelTigo.</p>
+  <button onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Shop Bundles</button>
+</section>
+
+<section class="features">
+  <div class="feature">⚡ Easy Ordering</div>
+  <div class="feature">📱 Three Networks</div>
+  <div class="feature">🔒 Secure Payment</div>
+</section>
+
+<main id="shop">
+
+<h2>Available Bundles</h2>
+
+<div class="controls">
+  <input id="search" placeholder="Search for a bundle..." oninput="render()">
+
+  <select id="network" onchange="render()">
+    <option value="All">All Networks</option>
+    <option>MTN</option>
+    <option>Telecel</option>
+    <option>AirtelTigo</option>
+  </select>
+
+  <select id="category" onchange="render()">
+    <option value="All">All Categories</option>
+    <option>Regular</option>
+    <option>Video</option>
+    <option>Social</option>
+    <option>Daily</option>
+    <option>Weekly</option>
+    <option>Monthly</option>
+    <option>Hybrid</option>
+    <option>Kokoo</option>
+    <option>XXL</option>
+    <option>Midnight Overdrive</option>
+    <option>Hourly Burst</option>
+  </select>
+</div>
+
+<div class="products" id="products"></div>
+
+<section class="panel" id="cart">
+<h2>Your Shopping Cart</h2>
+<div id="items">Your cart is empty.</div>
+<div class="total">Total: GH₵<span id="total">0.00</span></div>
+</section>
+
+<section class="panel checkout">
+<h2>Checkout Details</h2>
+
+<form id="checkoutForm" onsubmit="submitOrder(event)">
+  <input id="customerName" placeholder="Full name" required>
+
+  <input id="customerEmail" type="email" placeholder="Email address" required>
+
+  <input id="recipientNumber" type="tel" placeholder="Recipient's phone number" required>
+
+  <select id="recipientNetwork" required>
+    <option value="">Select recipient network</option>
+    <option>MTN</option>
+    <option>Telecel</option>
+    <option>AirtelTigo</option>
+  </select>
+
+  <button class="paybtn" id="payButton" type="submit">
+    Pay with Mobile Money
+  </button>
+</form>
+
+<p class="note">
+  Payments are handled through Paystack's secure payment process.
+  Never enter your Mobile Money PIN on this website.
+</p>
+
+<div id="message"></div>
+</section>
+
+</main>
+
+<footer>
+<h3>DESMOND'S HUBI</h3>
+<p>Your reliable destination for affordable data bundles.</p>
+<p>MTN | Telecel | AirtelTigo</p>
+<p>© 2026 Desmond's Hubi</p>
+</footer>
+
+<script>
+
+const bundles = [
+["MTN","Regular","20.46MB",1.05],
+["MTN","Regular","40.91MB",1.55],
+["MTN","Regular","401.63MB",3.55],
+["MTN","Regular","826.72MB",10.60],
+["MTN","Regular","1.37GB",20.70],
+["MTN","Regular","2.74GB",40.70],
+["MTN","Regular","4.11GB",60.70],
+["MTN","Regular","5.48GB",80.70],
+["MTN","Regular","9.05GB",101.50],
+["MTN","Regular","10.86GB",121.50],
+["MTN","Regular","13.57GB",151.50],
+["MTN","Regular","30.47GB",202],
+["MTN","Regular","38.09GB",252],
+["MTN","Regular","91.55GB",306],
+["MTN","Regular","106.81GB",356],
+["MTN","Regular","214.53GB",406],
+["MTN","Video","156.01MB",1.80],
+["MTN","Video","780.03MB",6],
+["MTN","Video","1.52GB",11.50],
+["MTN","Social","81.80MB",1.80],
+["MTN","Social","407.50MB",6],
+["MTN","Social","818.00MB",11.50],
+
+["Telecel","Regular","22.29MB",0.50],
+["Telecel","Regular","50.14MB",1],
+["Telecel","Regular","111.43MB",2],
+["Telecel","Regular","557.15MB",5.70],
+["Telecel","Regular","891.44MB",10.70],
+["Telecel","Regular","1.71GB",20.70],
+["Telecel","Regular","4.56GB",50.70],
+["Telecel","Regular","10.27GB",101.50],
+["Telecel","Regular","34.2GB",202],
+["Telecel","Regular","102.7GB",302],
+["Telecel","Regular","259.7GB",403],
+["Telecel","Midnight Overdrive","3.85GB",2],
+["Telecel","Midnight Overdrive","9.9GB",3.70],
+["Telecel","Hourly Burst","440MB",1],
+["Telecel","Hourly Burst","1.1GB",2.70],
+["Telecel","Daily","445MB · 1 day",3],
+["Telecel","Daily","780MB · 3 days",5],
+["Telecel","Daily","2GB · 5 days",15.70],
+["Telecel","Daily","2.62GB · 5 days",20.70],
+["Telecel","Weekly","1GB · 15 days",10.70],
+["Telecel","Weekly","5.13GB · 15 days",45.50],
+["Telecel","Monthly","2.51GB",20.70],
+["Telecel","Monthly","6.27GB",50.70],
+["Telecel","Monthly","13.12GB",101.50],
+["Telecel","Monthly","39.93GB",203],
+["Telecel","Monthly","114.1GB",302],
+["Telecel","Monthly","269.7GB",403],
+
+["AirtelTigo","Regular","51MB",1],
+["AirtelTigo","Regular","111MB",2],
+["AirtelTigo","Regular","390MB",3],
+["AirtelTigo","Regular","557MB",5],
+["AirtelTigo","Regular","891MB",10],
+["AirtelTigo","Regular","1.7GB",21.20],
+["AirtelTigo","Regular","4.5GB",51.20],
+["AirtelTigo","Regular","10GB",101.50],
+["AirtelTigo","Regular","33.4GB",202],
+["AirtelTigo","Regular","100.3GB",302],
+["AirtelTigo","Regular","117GB",356],
+["AirtelTigo","Regular","253.3GB",402],
+["AirtelTigo","Hybrid","40MB + 26 mins",2],
+["AirtelTigo","Hybrid","120MB + 66 mins",5],
+["AirtelTigo","Hybrid","266MB + 138 mins",10],
+["AirtelTigo","Hybrid","400MB + 210 mins",15.70],
+["AirtelTigo","Kokoo","446MB · 1 day",3],
+["AirtelTigo","Kokoo","446MB · 3 days",3],
+["AirtelTigo","Kokoo","780MB · 3 days",5],
+["AirtelTigo","Kokoo","1GB · 2 days",6],
+["AirtelTigo","Kokoo","1.1GB · 5 days",10],
+["AirtelTigo","Kokoo","2GB · 4 days",15.70],
+["AirtelTigo","Kokoo","2.5GB · 5 days",21.20],
+["AirtelTigo","Kokoo","6.2GB · 15 days",51.20],
+["AirtelTigo","XXL","12.8GB",100.50],
+["AirtelTigo","XXL","39GB",202],
+["AirtelTigo","XXL","130.4GB",356]
+];
+
+let cart = [];
+
+function render(){
+  const q = document.getElementById("search").value.toLowerCase();
+  const net = document.getElementById("network").value;
+  const cat = document.getElementById("category").value;
+
+  const filtered = bundles.map((b,i)=>({...b,index:i}))
+    .filter(b =>
+      (net==="All" || b[0]===net) &&
+      (cat==="All" || b[1]===cat) &&
+      b.slice(0,3).join(" ").toLowerCase().includes(q)
+    );
+
+  document.getElementById("products").innerHTML =
+    filtered.map(b=>`
+      <div class="product">
+        <div class="network">${b[0]} · ${b[1]}</div>
+        <h3>${b[2]}</h3>
+        <div class="price">GH₵${b[3].toFixed(2)}</div>
+        <button onclick="add(${b.index})">Add to Cart</button>
+      </div>
+    `).join("") || "<p>No bundles found.</p>";
+}
+
+function add(index){
+  cart.push(bundles[index]);
+  updateCart();
+}
+
+function removeItem(index){
+  cart.splice(index,1);
+  updateCart();
+}
+
+function updateCart(){
+  document.getElementById("count").textContent=cart.length;
+
+  document.getElementById("items").innerHTML = cart.length
+    ? cart.map((b,i)=>`
+      <div class="cartitem">
+        <span>${b[0]} ${b[2]}<br>GH₵${b[3].toFixed(2)}</span>
+        <button class="remove" onclick="removeItem(${i})">Remove</button>
+      </div>
+    `).join("")
+    : "Your cart is empty.";
+
+  const total=cart.reduce((sum,b)=>sum+b[3],0);
+  document.getElementById("total").textContent=total.toFixed(2);
+}
+
+function goCart(){
+  document.getElementById("cart").scrollIntoView({behavior:"smooth"});
+}
+
+async function submitOrder(event){
+  event.preventDefault();
+
+  const message=document.getElementById("message");
+  const button=document.getElementById("payButton");
+
+  if(!cart.length){
+    message.textContent="Please add a bundle to your cart first.";
+    return;
+  }
+
+  const name=document.getElementById("customerName").value.trim();
+  const email=document.getElementById("customerEmail").value.trim();
+  const recipientNumber=document.getElementById("recipientNumber").value.trim();
+  const recipientNetwork=document.getElementById("recipientNetwork").value;
+
+  if(cart.some(b=>b[0]!==recipientNetwork)){
+    message.textContent="Your selected bundles must match the recipient network.";
+    return;
+  }
+
+  button.disabled=true;
+  button.textContent="Connecting to payment...";
+  message.textContent="Please wait. Preparing your payment.";
+
+  try{
+    const response=await fetch("/.netlify/functions/initialize-payment",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        name,
+        email,
+        recipientNumber,
+        recipientNetwork,
+        cart:cart.map(b=>({
+          n:b[0],
+          c:b[1],
+          s:b[2]
+        }))
+      })
+    });
+
+    const data=await response.json();
+
+    if(!response.ok || !data.authorization_url){
+      throw new Error(data.error || "Unable to start payment.");
+    }
+
+    window.location.href=data.authorization_url;
+
+  }catch(error){
+    message.textContent=error.message || "Payment could not be started. Please try again.";
+    button.disabled=false;
+    button.textContent="Pay with Mobile Money";
+  }
+}
+
+render();
+updateCart();
+
+</script>
+</body>
+  </html>
